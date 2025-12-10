@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "rushford:poop_block"
+    }
+  ],
+  "result": {
+    "id": "rushford:poop",
+    "count": 9
+  }
+}

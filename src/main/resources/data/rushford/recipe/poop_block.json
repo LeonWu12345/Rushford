@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PPP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "rushford:poop"
+    }
+  },
+  "result": {
+    "id": "rushford:poop_block",
+    "count": 1
+  }
+}

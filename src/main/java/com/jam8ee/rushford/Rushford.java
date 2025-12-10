@@ -1,8 +1,12 @@
 package com.jam8ee.rushford;
 
+import com.jam8ee.rushford.item.ModFuels;
 import com.jam8ee.rushford.item.ModItems;
 import com.jam8ee.rushford.sound.ModSounds;
+import com.jam8ee.rushford.block.ModBlocks;
+import com.jam8ee.rushford.item.ModItems;
 import net.fabricmc.api.ModInitializer;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,8 @@ public class Rushford implements ModInitializer {
 
 		ModItems.registerModItems();
 		ModSounds.registerModSounds();
+		ModBlocks.registerModBlocks();
+		ModFuels.registerFuels();
 		LOGGER.info("Hello Fabric world!");
 	}
 }
