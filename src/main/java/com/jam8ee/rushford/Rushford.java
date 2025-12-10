@@ -1,4 +1,4 @@
-package rushford_1;
+package com.jam8ee.rushford;
 
 import net.fabricmc.api.ModInitializer;
 
