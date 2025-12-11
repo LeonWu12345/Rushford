@@ -3,6 +3,7 @@ package com.jam8ee.rushford.block;
 import com.jam8ee.rushford.Rushford;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -16,8 +17,26 @@ public class ModBlocks {
 
     public static final Block POOP_BLOCK = registerBlock("poop_block",
             new Block(AbstractBlock.Settings.create()
-                    .strength(0.5f)  // 容易挖掘
-                    .sounds(BlockSoundGroup.SLIME)  // 史莱姆音效
+                    .strength(0.5f)
+                    .sounds(BlockSoundGroup.SLIME)
+            ));
+
+    public static final Block TOILET = registerBlock("toilet",
+            new ToiletBlock(AbstractBlock.Settings.create()
+                    .strength(1.5f)
+                    .sounds(BlockSoundGroup.STONE)
+                    .nonOpaque()
+            ));
+
+    public static final Block POOP_PORTAL = Registry.register(
+            Registries.BLOCK,
+            Identifier.of(Rushford.MOD_ID, "poop_portal"),
+            new PoopPortalBlock(AbstractBlock.Settings.copy(Blocks.NETHER_PORTAL)
+                    .noCollision()
+                    .ticksRandomly()
+                    .strength(-1.0f)
+                    .sounds(BlockSoundGroup.GLASS)
+                    .luminance(state -> 11)
             ));
 
     private static Block registerBlock(String name, Block block) {

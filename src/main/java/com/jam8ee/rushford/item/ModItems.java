@@ -16,10 +16,10 @@ public class ModItems {
 
     public static final Item POOP = registerItem("poop", new Item(new Item.Settings()
             .food(new FoodComponent.Builder()
-                    .nutrition(0)           //不恢复饱食度
-                    .saturationModifier(0)  //不恢复饱和度
-                    .alwaysEdible()         //随时可吃
-                    .statusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 300, 0), 1.0f)  //恶心15秒
+                    .nutrition(0)//不恢复饱食度
+                    .saturationModifier(0)//不恢复饱和度
+                    .alwaysEdible()//随时可吃
+                    .statusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 300, 0), 1.0f)//恶心15秒
                     .build()
             )
     ));

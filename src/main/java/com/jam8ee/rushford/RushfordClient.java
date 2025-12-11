@@ -1,10 +1,13 @@
 package com.jam8ee.rushford;
 
+import com.jam8ee.rushford.block.entity.ModScreenHandlers;
 import com.jam8ee.rushford.client.ClientPoopData;
 import com.jam8ee.rushford.client.PoopMeterHud;
+import com.jam8ee.rushford.client.ToiletScreen;
 import com.jam8ee.rushford.network.PoopMeterSyncPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
 public class RushfordClient implements ClientModInitializer {
     @Override
@@ -18,6 +21,8 @@ public class RushfordClient implements ClientModInitializer {
                 ClientPoopData.setPoopLevel(payload.poopLevel());
             });
         });
+
+        HandledScreens.register(ModScreenHandlers.TOILET_SCREEN_HANDLER, ToiletScreen::new);
 
         Rushford.LOGGER.info("Rushford client initialized!");
     }

@@ -1,5 +1,7 @@
 {
   "item.rushford.poop": "Poop",
   "block.rushford.poop_block": "Poop Block",
+  "block.rushford.poop_portal": "Poop Portal",
+  "block.rushford.toilet": "Toilet",
   "effect.rushford.diarrhea": "Diarrhea"
 }

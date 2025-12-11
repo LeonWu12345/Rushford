@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "toilet": "rushford:block/toilet",
+    "particle": "rushford:block/toilet"
+  },
+  "elements": [
+    {
+      "name": "base",
+      "from": [2, 0, 2],
+      "to": [14, 8, 14],
+      "faces": {
+        "north": { "texture": "#toilet" },
+        "south": { "texture": "#toilet" },
+        "east": { "texture": "#toilet" },
+        "west": { "texture": "#toilet" },
+        "up": { "texture": "#toilet" },
+        "down": { "texture": "#toilet" }
+      }
+    },
+    {
+      "name": "seat",
+      "from": [2, 8, 2],
+      "to": [14, 10, 14],
+      "faces": {
+        "north": { "texture": "#toilet" },
+        "south": { "texture": "#toilet" },
+        "east": { "texture": "#toilet" },
+        "west": { "texture": "#toilet" },
+        "up": { "texture": "#toilet" },
+        "down": { "texture": "#toilet" }
+      }
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 package com.jam8ee.rushford;
 
+import com.jam8ee.rushford.block.entity.ModBlockEntities;
+import com.jam8ee.rushford.block.entity.ModScreenHandlers;
 import com.jam8ee.rushford.effect.ModEffects;
 import com.jam8ee.rushford.event.ModEvents;
 import com.jam8ee.rushford.item.ModFuels;
@@ -9,6 +11,7 @@ import com.jam8ee.rushford.network.PoopMeterSyncPayload;
 import com.jam8ee.rushford.sound.ModSounds;
 import com.jam8ee.rushford.block.ModBlocks;
 import com.jam8ee.rushford.item.ModItems;
+import com.jam8ee.rushford.world.ModDimensions;
 import net.fabricmc.api.ModInitializer;
 
 
@@ -31,6 +34,9 @@ public class Rushford implements ModInitializer {
 		ModFuels.registerFuels();
 		ModEvents.registerEvents();
 		ModEffects.registerModEffects();
+		ModBlockEntities.registerBlockEntities();
+		ModScreenHandlers.registerScreenHandlers();
+//		ModDimensions.register();
 //		ModNetworking.registerS2CPayloads();
 
 		LOGGER.info("Hello Fabric world!");
