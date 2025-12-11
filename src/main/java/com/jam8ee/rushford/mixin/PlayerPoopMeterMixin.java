@@ -44,4 +44,13 @@ public class PlayerPoopMeterMixin implements IPoopMeter {
     private void onReadNbt(NbtCompound nbt, CallbackInfo ci) {
         rushford$poopLevel = nbt.getInt("rushford_poop_level");
     }
+
+//    @Inject(method = "copyFrom", at =  @At("TAIL"))
+//    private void  onRespawn(PlayerEntity oldPlayer, boolean alive,CallbackInfo ci) {
+//        if (!alive) {
+//            this.rushford$poopLevel =  0;
+//        } else {
+//            this.rushford$poopLevel = ((IPoopMeter) oldPlayer).rushford$getPoopLevel();
+//        }
+//    }
 }
