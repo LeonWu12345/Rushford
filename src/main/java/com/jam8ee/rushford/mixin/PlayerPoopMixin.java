@@ -1,14 +1,17 @@
 package com.jam8ee.rushford.mixin;
 
 import com.jam8ee.rushford.item.ModItems;
+import com.jam8ee.rushford.network.PoopMeterSyncPayload;
+import com.jam8ee.rushford.poop.IPoopMeter;
 import com.jam8ee.rushford.sound.ModSounds;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,19 +31,40 @@ public class PlayerPoopMixin {
 
     @Inject(method = "update", at = @At("HEAD"))
     private void onUpdate(PlayerEntity player, CallbackInfo ci) {
-        // 初始化上一次的饱食度
+        if (player.getWorld().isClient()) return;
+
+        // 初始化
         if (previousFoodLevel == -1) {
             previousFoodLevel = foodLevel;
+            return;
         }
 
-        // 检测：从未满 -> 满（20）
-        if (previousFoodLevel < 20 && foodLevel >= 20) {
-            if (!player.getWorld().isClient()) {
+        // 饱食度下降时，增加憋屎度
+        if (foodLevel < previousFoodLevel) {
+            int decrease = previousFoodLevel - foodLevel;
+            IPoopMeter poopMeter = (IPoopMeter) player;
+            poopMeter.rushford$addPoopLevel(decrease);
+
+            // 同步到客户端
+            syncPoopLevel(player);
+
+            // 如果憋屎度满了，拉屎
+            if (poopMeter.rushford$getPoopLevel() >= 20) {
                 doPoop(player);
+                poopMeter.rushford$setPoopLevel(0);
+                syncPoopLevel(player);
             }
         }
 
         previousFoodLevel = foodLevel;
+    }
+
+    @Unique
+    private void syncPoopLevel(PlayerEntity player) {
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            int level = ((IPoopMeter) player).rushford$getPoopLevel();
+            ServerPlayNetworking.send(serverPlayer, new PoopMeterSyncPayload(level));
+        }
     }
 
     @Unique
@@ -65,7 +89,7 @@ public class PlayerPoopMixin {
         ItemStack poopStack = new ItemStack(ModItems.poop);
         ItemEntity itemEntity = new ItemEntity(world, dropX, dropY, dropZ, poopStack);
         itemEntity.setVelocity(-lookVec.x * 0.1, 0.2, -lookVec.z * 0.1);
-        itemEntity.setPickupDelay(40); // 2秒后才能捡
+        itemEntity.setPickupDelay(40);
 
         world.spawnEntity(itemEntity);
     }

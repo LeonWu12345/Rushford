@@ -3,7 +3,8 @@
 	"package": "com.jam8ee.rushford.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"PlayerPoopMixin"
+		"PlayerPoopMixin",
+		"PlayerPoopMeterMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

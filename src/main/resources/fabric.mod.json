@@ -18,6 +18,9 @@
 		"main": [
 			"com.jam8ee.rushford.Rushford"
 		],
+		"client": [
+			"com.jam8ee.rushford.RushfordClient"
+		],
 		"fabric-datagen": [
 			"com.jam8ee.rushford.RushfordDataGenerator"
 		]
