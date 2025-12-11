@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.GameMode;
 
 public class PoopMeterHud implements HudRenderCallback {
 
@@ -18,6 +19,13 @@ public class PoopMeterHud implements HudRenderCallback {
 
         if (client.player == null) return;
         if (client.options.hudHidden) return;
+
+        if(client.interactionManager != null) {
+            GameMode gameMode = client.interactionManager.getCurrentGameMode();
+            if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) {
+                return;
+            }
+        }
 
         int screenWidth = client.getWindow().getScaledWidth();
         int screenHeight = client.getWindow().getScaledHeight();

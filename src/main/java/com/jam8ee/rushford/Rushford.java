@@ -1,5 +1,6 @@
 package com.jam8ee.rushford;
 
+import com.jam8ee.rushford.effect.ModEffects;
 import com.jam8ee.rushford.event.ModEvents;
 import com.jam8ee.rushford.item.ModFuels;
 import com.jam8ee.rushford.item.ModItems;
@@ -29,6 +30,7 @@ public class Rushford implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModFuels.registerFuels();
 		ModEvents.registerEvents();
+		ModEffects.registerModEffects();
 //		ModNetworking.registerS2CPayloads();
 
 		LOGGER.info("Hello Fabric world!");

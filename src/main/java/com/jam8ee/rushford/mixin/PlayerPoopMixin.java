@@ -86,7 +86,7 @@ public class PlayerPoopMixin {
         double dropY = player.getY() + 0.5;
         double dropZ = player.getZ() - lookVec.z * 0.5;
 
-        ItemStack poopStack = new ItemStack(ModItems.poop);
+        ItemStack poopStack = new ItemStack(ModItems.POOP);
         ItemEntity itemEntity = new ItemEntity(world, dropX, dropY, dropZ, poopStack);
         itemEntity.setVelocity(-lookVec.x * 0.1, 0.2, -lookVec.z * 0.1);
         itemEntity.setPickupDelay(40);
