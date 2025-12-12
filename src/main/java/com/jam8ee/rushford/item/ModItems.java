@@ -16,12 +16,16 @@ public class ModItems {
 
     public static final Item POOP = registerItem("poop", new Item(new Item.Settings()
             .food(new FoodComponent.Builder()
-                    .nutrition(0)//不恢复饱食度
-                    .saturationModifier(0)//不恢复饱和度
-                    .alwaysEdible()//随时可吃
-                    .statusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 300, 0), 1.0f)//恶心15秒
+                    .nutrition(0)
+                    .saturationModifier(0)
+                    .alwaysEdible()
+                    .statusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200, 0), 1.0f)
                     .build()
             )
+    ));
+
+    public static final Item POOP_BALL = registerItem("poop_ball", new PoopBallItem(new Item.Settings()
+            .maxCount(16)
     ));
 
     private static Item registerItem(String name, Item item) {
@@ -31,12 +35,13 @@ public class ModItems {
     public static void registerModItems() {
         Rushford.LOGGER.info("Registering items for " + Rushford.MOD_ID);
 
-        //添加到材料物品栏
+        // 添加到材料物品栏
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> {
             content.add(POOP);
+            content.add(POOP_BALL);
         });
 
-        //堆肥桶 100% 概率
+        // 堆肥桶 100% 概率
         CompostingChanceRegistry.INSTANCE.add(POOP, 1.0f);
     }
 }
