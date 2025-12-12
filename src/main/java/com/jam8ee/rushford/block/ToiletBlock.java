@@ -1,11 +1,13 @@
 package com.jam8ee.rushford.block;
 
 import com.jam8ee.rushford.block.entity.ToiletBlockEntity;
+import com.jam8ee.rushford.entity.ToiletEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -13,6 +15,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -20,15 +23,16 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class ToiletBlock extends BlockWithEntity {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final MapCodec<ToiletBlock> CODEC = createCodec(ToiletBlock::new);
 
-    // 马桶的碰撞箱
     private static final VoxelShape SHAPE = VoxelShapes.union(
-            Block.createCuboidShape(2, 0, 2, 14, 8, 14),  // 底座
-            Block.createCuboidShape(2, 8, 2, 14, 10, 14)  // 座圈
+            Block.createCuboidShape(2, 0, 2, 14, 8, 14),
+            Block.createCuboidShape(2, 8, 2, 14, 10, 14)
     );
 
     public ToiletBlock(Settings settings) {
@@ -79,11 +83,60 @@ public class ToiletBlock extends BlockWithEntity {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        // 潜行时打开物品栏
+        if (player.isSneaking()) {
+            if (!world.isClient()) {
+                NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                if (screenHandlerFactory != null) {
+                    player.openHandledScreen(screenHandlerFactory);
+                }
+            }
+            return ItemActionResult.SUCCESS;
+        }
+
+        // 非潜行时坐下
         if (!world.isClient()) {
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            if (screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+            List<ToiletEntity> existingSeats = world.getEntitiesByClass(
+                    ToiletEntity.class,
+                    new Box(pos),
+                    entity -> true
+            );
+
+            if (existingSeats.isEmpty()) {
+                ToiletEntity seat = new ToiletEntity(world, pos);
+                world.spawnEntity(seat);
+                player.startRiding(seat);
+            }
+        }
+        return ItemActionResult.SUCCESS;
+    }
+
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        // 空手时的交互
+        if (player.isSneaking()) {
+            if (!world.isClient()) {
+                NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+                if (screenHandlerFactory != null) {
+                    player.openHandledScreen(screenHandlerFactory);
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
+
+        // 非潜行时坐下
+        if (!world.isClient()) {
+            List<ToiletEntity> existingSeats = world.getEntitiesByClass(
+                    ToiletEntity.class,
+                    new Box(pos),
+                    entity -> true
+            );
+
+            if (existingSeats.isEmpty()) {
+                ToiletEntity seat = new ToiletEntity(world, pos);
+                world.spawnEntity(seat);
+                player.startRiding(seat);
             }
         }
         return ActionResult.SUCCESS;
@@ -92,6 +145,17 @@ public class ToiletBlock extends BlockWithEntity {
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
+            // 移除座位实体
+            List<ToiletEntity> seats = world.getEntitiesByClass(
+                    ToiletEntity.class,
+                    new Box(pos),
+                    entity -> true
+            );
+            for (ToiletEntity seat : seats) {
+                seat.discard();
+            }
+
+            // 掉落物品
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof ToiletBlockEntity toilet) {
                 ItemScatterer.spawn(world, pos, toilet);

@@ -3,6 +3,7 @@ package com.jam8ee.rushford;
 import com.jam8ee.rushford.block.entity.ModBlockEntities;
 import com.jam8ee.rushford.block.entity.ModScreenHandlers;
 import com.jam8ee.rushford.effect.ModEffects;
+import com.jam8ee.rushford.entity.ModEntities;
 import com.jam8ee.rushford.event.ModEvents;
 import com.jam8ee.rushford.item.ModFuels;
 import com.jam8ee.rushford.item.ModItems;
@@ -36,6 +37,7 @@ public class Rushford implements ModInitializer {
 		ModEffects.registerModEffects();
 		ModBlockEntities.registerBlockEntities();
 		ModScreenHandlers.registerScreenHandlers();
+		ModEntities.registerEntities();
 //		ModDimensions.register();
 //		ModNetworking.registerS2CPayloads();
 
