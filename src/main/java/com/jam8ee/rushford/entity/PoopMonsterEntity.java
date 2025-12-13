@@ -4,11 +4,13 @@ import com.jam8ee.rushford.entity.ai.PoopMonsterAttackGoal;
 import com.jam8ee.rushford.entity.ai.PoopMonsterFleeGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.MerchantEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
@@ -23,17 +25,20 @@ public class PoopMonsterEntity extends HostileEntity {
 
     @Override
     protected void initGoals() {
-        // 目标选择
-        this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-
-        // 行为
+        // 行为目标 (和僵尸类似)
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new PoopMonsterFleeGoal(this, PlayerEntity.class, 16.0f, 1.2, 1.5));
         this.goalSelector.add(2, new PoopMonsterAttackGoal(this, 1.0, 40, 15.0f));
-        this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
-        this.goalSelector.add(5, new LookAroundGoal(this));
+        this.goalSelector.add(5, new WanderAroundFarGoal(this, 1.0));
+        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
+        this.goalSelector.add(6, new LookAroundGoal(this));
+
+        // 目标选择 (和僵尸一样的寻敌逻辑)
+        this.targetSelector.add(1, new RevengeGoal(this));
+        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, MerchantEntity.class, false));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
+        this.targetSelector.add(5, new ActiveTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_TURTLE_ON_LAND_FILTER));
     }
 
     public static DefaultAttributeContainer.Builder createPoopMonsterAttributes() {

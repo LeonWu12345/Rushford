@@ -32,7 +32,7 @@ public class ModEntities {
             Registries.ENTITY_TYPE,
             Identifier.of(Rushford.MOD_ID, "poop_monster"),
             EntityType.Builder.<PoopMonsterEntity>create(PoopMonsterEntity::new, SpawnGroup.MONSTER)
-                    .dimensions(0.6f, 1.95f) // 和僵尸一样的大小
+                    .dimensions(0.6f, 1.95f)
                     .maxTrackingRange(8)
                     .build()
     );

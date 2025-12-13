@@ -76,7 +76,6 @@ public class PoopMonsterFleeGoal extends Goal {
 
     @Override
     public void tick() {
-        // 以最快速度逃跑
         this.mob.getNavigation().setSpeed(this.fastSpeed);
     }
 }
